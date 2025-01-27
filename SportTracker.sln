@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportTracker.BL", "SportTracker.BL\SportTracker.BL.csproj", "{FFE0210A-2B40-4108-89AB-F0B5665D3A1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportTracker.CMD", "SportTracker.CMD\SportTracker.CMD.csproj", "{16950247-316A-4402-9284-E029C202F769}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFE0210A-2B40-4108-89AB-F0B5665D3A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE0210A-2B40-4108-89AB-F0B5665D3A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE0210A-2B40-4108-89AB-F0B5665D3A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE0210A-2B40-4108-89AB-F0B5665D3A1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16950247-316A-4402-9284-E029C202F769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16950247-316A-4402-9284-E029C202F769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16950247-316A-4402-9284-E029C202F769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16950247-316A-4402-9284-E029C202F769}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
