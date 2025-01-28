@@ -5,6 +5,7 @@ namespace SportTracker.BL.Model
 	/// <summary>
 	/// Gender.
 	/// </summary>
+	[Serializable]
 	public class Gender
 	{
 		/// <summary>
@@ -19,12 +20,7 @@ namespace SportTracker.BL.Model
 		/// <exception cref="ArgumentNullException"></exception>
 		public Gender(string name) 
 		{
-			if (string.IsNullOrEmpty(name))
-			{ 
-				throw new ArgumentNullException("Name of gender can not be NULL or empty", nameof(name));
-			}
-
-			Name = name;
+			Name = name ?? throw new ArgumentNullException("Name of gender can not be NULL or empty", nameof(name));
 		}
 
 		public override string ToString() 

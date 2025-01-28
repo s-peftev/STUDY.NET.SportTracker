@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace SportTracker.BL.Model
 {
 	/// <summary>
 	/// User.
 	/// </summary>
+	[Serializable]
 	public class User
 	{
 		/// <summary>
