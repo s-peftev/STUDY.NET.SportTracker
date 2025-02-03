@@ -1,31 +1,22 @@
-﻿using System;
+﻿
+using System.Text.Json.Serialization;
 
 namespace SportTracker.BL.Model
 {
-	/// <summary>
-	/// Gender.
-	/// </summary>
-	[Serializable]
-	public class Gender
+	public sealed class Gender
 	{
-		/// <summary>
-		/// Gender name.
-		/// </summary>
+		public static readonly Gender MALE = new("Male");
+		public static readonly Gender FEMALE = new("Female");
+		public static readonly Gender UNKNOWN = new("Unknown");
+
 		public string Name { get; }
 
-		/// <summary>
-		/// Create new gender.
-		/// </summary>
-		/// <param name="name"> Gender name. </param>
-		/// <exception cref="ArgumentNullException"></exception>
-		public Gender(string name) 
+		[JsonConstructor]
+		private Gender(string name)
 		{
-			Name = name ?? throw new ArgumentNullException("Name of gender can not be NULL or empty", nameof(name));
+			Name = name;
 		}
 
-		public override string ToString() 
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 	}
 }

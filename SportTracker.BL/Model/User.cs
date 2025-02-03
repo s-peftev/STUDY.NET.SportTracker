@@ -10,76 +10,96 @@ namespace SportTracker.BL.Model
 	public class User
 	{
 		/// <summary>
-		/// User name.
+		/// Login
 		/// </summary>
-		public string Name { get; }
+		public string Login { get; }
+
+		private Gender _gender;
 		/// <summary>
 		/// User gender.
 		/// </summary>
-		public Gender Gender { get; }
+		public Gender Gender {
+			get => _gender;
+			set
+			{ 	
+				if (value == null) throw new ArgumentNullException(nameof(Gender), "Gender cannot be null");
+
+				if (value.Name != Gender.MALE.Name 
+					&& value.Name != Gender.FEMALE.Name 
+					&& value.Name != Gender.UNKNOWN.Name) throw new ArgumentException("Invalid gender value.", nameof(Gender));
+
+				_gender = value;
+			} 
+		}
+
+		private DateTime _birthDate;
 		/// <summary>
 		/// User birthday
 		/// </summary>
-		public DateTime Birthday { get; }
+		public DateTime Birthdate 
+		{ 
+			get => _birthDate;
+			set
+			{
+				if (value > DateTime.Now) throw new ArgumentException("Birth date cannot be in the future.", nameof(Birthdate));
+				_birthDate = value;
+			}
+		}
 
+		private double _weight;
 		/// <summary>
 		/// User weight
 		/// </summary>
-		public double Weight { get; set; }
+		public double Weight 
+		{
+			get => _weight;
+			set
+			{
+				if (value <= 0) throw new ArgumentException("Weight must be greater than 0.", nameof(Weight));
+				_weight = value;
+			}
+		}
+
+		private double _height;
 		/// <summary>
 		/// User height
 		/// </summary>
-		public double Height { get; set; }
+		public double Height
+		{
+			get => _height;
+			set
+			{
+				if (value <= 0) throw new ArgumentException("Height must be greater than 0.", nameof(Height));
+				_height = value;
+			}
+		}
+
 
 		/// <summary>
 		/// Create new user
 		/// </summary>
-		/// <param name="name">User name.</param>
+		/// <param name="login">User name.</param>
 		/// <param name="gender">User gender.</param>
 		/// <param name="birthDay">User birthday</param>
 		/// <param name="weight">User weight</param>
 		/// <param name="height">User height</param>
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="ArgumentException"></exception>
-		public User(string name, Gender gender, DateTime birthDay, double weight, double height) 
+		[JsonConstructor]
+		public User(string login, Gender gender, DateTime birthDate, double weight, double height) 
 		{
-			#region check-up region
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException("Name of user can not be NULL or empty", nameof(name));
-			}
-
-			if (gender == null) 
-			{
-				throw new ArgumentNullException("Gender be NULL", nameof(gender));
-			}
-
-			if (birthDay < DateTime.Parse("01.01.1900") || birthDay >= DateTime.Now) 
-			{
-				throw new ArgumentException("Impossible date of birth", nameof(birthDay));
-			}
-
-			if (weight <= 0) 
-			{
-				throw new ArgumentException("Weight can not be less or equal 0", nameof(weight));
-			}
-
-			if (height <= 0) 
-			{
-				throw new ArgumentException("Height can not be less or equal 0", nameof(height));
-			}
-			#endregion
-
-			Name = name;
+			Login = login ?? throw new ArgumentNullException(nameof(login), "Login can not be NULL or empty");
 			Gender = gender;
-			Birthday = birthDay;
+			Birthdate = birthDate;
 			Weight = weight;
 			Height = height;
 		}
 
+		public User(string login) : this(login, Gender.Male, DateTime.Now, 1, 1) { }
+
 		public override string ToString() 
 		{
-			return Name;
+			return Login;
 		}
 	}
 }
