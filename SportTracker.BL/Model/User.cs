@@ -9,28 +9,16 @@ namespace SportTracker.BL.Model
 	[Serializable]
 	public class User
 	{
+		public enum Gender { Male, Female, Unknown }
 		/// <summary>
 		/// Login
 		/// </summary>
 		public string Login { get; }
 
-		private Gender _gender;
 		/// <summary>
 		/// User gender.
 		/// </summary>
-		public Gender Gender {
-			get => _gender;
-			set
-			{ 	
-				if (value == null) throw new ArgumentNullException(nameof(Gender), "Gender cannot be null");
-
-				if (value.Name != Gender.MALE.Name 
-					&& value.Name != Gender.FEMALE.Name 
-					&& value.Name != Gender.UNKNOWN.Name) throw new ArgumentException("Invalid gender value.", nameof(Gender));
-
-				_gender = value;
-			} 
-		}
+		public Gender UserGender { get;	set; }
 
 		private DateTime _birthDate;
 		/// <summary>
@@ -86,16 +74,16 @@ namespace SportTracker.BL.Model
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="ArgumentException"></exception>
 		[JsonConstructor]
-		public User(string login, Gender gender, DateTime birthDate, double weight, double height) 
+		public User(string login, Gender userGender, DateTime birthDate, double weight, double height) 
 		{
 			Login = login ?? throw new ArgumentNullException(nameof(login), "Login can not be NULL or empty");
-			Gender = gender;
+			UserGender = userGender;
 			Birthdate = birthDate;
 			Weight = weight;
 			Height = height;
 		}
 
-		public User(string login) : this(login, Gender.Male, DateTime.Now, 1, 1) { }
+		//public User(string login) : this(login, Gender.Male, DateTime.Now, 1, 1) { }
 
 		public override string ToString() 
 		{

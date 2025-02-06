@@ -10,7 +10,6 @@ namespace SportTracker.BL.Controller
 	{
 		public List<User> Users { get; }
 		public User? CurrentUser { get; } = null;
-		public User? TempUser { get; } = null;
 		public bool IsNewUser { get; } = false;
 		
 
@@ -32,42 +31,67 @@ namespace SportTracker.BL.Controller
 
 			if (CurrentUser == null) 
 			{
-				//CurrentUser = new User(login);
-				//Users.Add(CurrentUser);
 				IsNewUser = true;
-				TempUser = new User(login, Gender.UNKNOWN, DateTime.Now, 1, 1);
-				//SaveUsersData();
+				CurrentUser = new User(login, User.Gender.Unknown, DateTime.Now, 1, 1);
 			}
 		}
 
-		public bool SetUserGender(string gender, User user)
+		public bool SetUserGender(string gender)
 		{ 
 			string normalizedGender = gender.Trim().ToLower();
 
 			if (normalizedGender == "male" || normalizedGender == "m")
 			{
-				user.Gender = Gender.MALE;
+				CurrentUser!.UserGender = User.Gender.Male;
 				return true;
 			}
 			else if (normalizedGender == "female" || normalizedGender == "f")
 			{
-				user.Gender = Gender.FEMALE;
+				CurrentUser!.UserGender = User.Gender.Female;
 				return true;
 			}
 
-			throw new ArgumentException("Invalid gender. Please enter Male or Female (or m/f).");
+			throw new ArgumentException("Invalid gender.");
 		}
 
-		public void SetNewUserData(string gender, DateTime birthDate, double weight = 1, double height = 1) 
+		public bool SetUserBirthDate(string? birthDate)
 		{
-			//TODO: add validation
+			string? normalizedBirthDate = birthDate?.Trim();
 
-			CurrentUser.Gender = Gender.MALE;
-			CurrentUser.Birthdate = birthDate;
-			CurrentUser.Weight = weight;
-			CurrentUser.Height = height;
+			if (DateTime.TryParse(normalizedBirthDate, out DateTime parsedDate))
+			{
+				CurrentUser!.Birthdate = parsedDate;
+				return true;
+			}
+			else
+			{
+				throw new ArgumentException("Invalid birth date.");
+			}
+		}
+
+		public bool SetUserWeight(double weight) 
+		{
+			CurrentUser!.Weight = weight;
+
+			return true;
+		}
+
+		public bool SetUserHeight(double height)
+		{
+			CurrentUser!.Height = height;
+
+			return true;
+		}
+
+		public void SignUpNewUser()
+		{
+			if (Users.Any(user => user.Login == CurrentUser!.Login))
+			{
+				throw new Exception("Such user is already exist!");
+			}
+
+			Users.Add(CurrentUser!);
 			SaveUsersData();
-
 		}
 
 		/// <summary>

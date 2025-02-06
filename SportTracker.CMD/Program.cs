@@ -26,11 +26,12 @@ do
 
 if (userController.IsNewUser)
 {
-	Console.WriteLine($"Hi, {userController.TempUser.Login}, it looks like you`re new. Let`s create you a profile!");
-	bool isValid = false;
+	Console.WriteLine($"Hi, {userController!.CurrentUser!.Login}, it looks like you`re new. Let`s create you a profile!");
+	bool isValidData;
 
 	do
 	{
+		isValidData = false;
 		Console.WriteLine("Enter your gender (Male/Female)(M/F): ");
 		var genderName = Console.ReadLine();
 
@@ -38,26 +39,85 @@ if (userController.IsNewUser)
 		{
 			try
 			{
-				isValid = userController.SetUserGender(genderName, userController.TempUser);
+				isValidData = userController.SetUserGender(genderName);
 			}
 			catch (ArgumentException ex) 
 			{
-				Console.WriteLine(ex.Message);
+				Console.WriteLine(ex.Message + "Please enter Male or Female (or m/f).");
 			}
 		}		
-	} while (!isValid);
+	} while (!isValidData);
+
+	do
+	{
+		isValidData = false;
+		Console.WriteLine("Enter your birth date: ");
+		var birthDate = Console.ReadLine();
+
+		try
+		{
+			isValidData = userController.SetUserBirthDate(birthDate);
+		}
+		catch (ArgumentException ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	} while (!isValidData);
+
+	do
+	{
+		isValidData = false;
+		Console.WriteLine("Enter your weight: ");
+
+		try
+		{
+			if (double.TryParse(Console.ReadLine(), out var weight))
+			{
+				isValidData = userController.SetUserWeight(weight);
+			}
+			else
+			{
+				Console.WriteLine("Invalid input. Please enter a valid number.");
+			}			
+		}
+		catch (ArgumentException ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	} while (!isValidData);
+
+	do
+	{
+		isValidData = false;
+		Console.WriteLine("Enter your height: ");
+
+		try
+		{
+			if (double.TryParse(Console.ReadLine(), out var height))
+			{
+				isValidData = userController.SetUserHeight(height);
+			}
+			else
+			{
+				Console.WriteLine("Invalid input. Please enter a valid number.");
+			}
+		}
+		catch (ArgumentException ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	} while (!isValidData);
+
+	try
+	{
+		userController.SignUpNewUser();
+		Console.WriteLine("Your profile has been successfully created!");
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine(ex.Message);
+	}
 	
-
-	Console.WriteLine("Enter your birthdate: ");
-	var birthdate = DateTime.Parse(Console.ReadLine());
-
-	Console.WriteLine("Enter your weight: ");
-	var weight = double.Parse(Console.ReadLine());
-
-	Console.WriteLine("Enter your height: ");
-	var height = double.Parse(Console.ReadLine());
-
-	Console.WriteLine("Compleete!");
 }
 else 
 {
