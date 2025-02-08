@@ -1,22 +1,14 @@
 ﻿using SportTracker.BL.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 
 namespace SportTracker.BL.Controller
 {
-	public class UserController
+	public class UserController : ControllerBase
 	{
 		public List<User> Users { get; }
 		public User? CurrentUser { get; } = null;
 		public bool IsNewUser { get; } = false;
-		
 
-		private static readonly JsonSerializerOptions s_readOptions = new()
-		{
-			WriteIndented = true
-		};
+		private readonly string _userListFilePath = "users.json";
 
 		public UserController(string login)
 		{
@@ -25,7 +17,7 @@ namespace SportTracker.BL.Controller
 				throw new ArgumentNullException(nameof(login), "Login can not be empty");
 			}
 
-			Users = LoadUsersData();
+			Users = LoadUserData();
 			
 			CurrentUser = Users.SingleOrDefault(u => u.Login == login);
 
@@ -91,34 +83,24 @@ namespace SportTracker.BL.Controller
 			}
 
 			Users.Add(CurrentUser!);
-			SaveUsersData();
+			SaveUserData();
 		}
 
 		/// <summary>
 		/// Load list of registered users
 		/// </summary>
 		/// <returns>List of registered users</returns>
-		public static List<User> LoadUsersData()
+		public List<User> LoadUserData()
 		{
-			using var fs = new FileStream("users.json", FileMode.OpenOrCreate);
-
-			if (JsonSerializer.Deserialize<List<User>>(fs) is List<User> users)
-			{
-				return users;
-			}
-			else
-			{
-				return [];
-			}
+			return LoadData<User>(_userListFilePath);
 		}
 
 		/// <summary>
 		/// Save user data
 		/// </summary>
-		void SaveUsersData()
+		void SaveUserData()
 		{
-			using var writeFs = new FileStream("users.json", FileMode.Create);
-			JsonSerializer.Serialize(writeFs, Users, s_readOptions);
+			SaveData<User>(_userListFilePath, Users);
 		}
 	}
 }
