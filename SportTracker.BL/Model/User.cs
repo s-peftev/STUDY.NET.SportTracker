@@ -9,7 +9,7 @@ namespace SportTracker.BL.Model
 	[Serializable]
 	public class User
 	{
-		public enum Gender { Male, Female, Unknown }
+		public enum Gender { Male, Female }
 		/// <summary>
 		/// Login
 		/// </summary>

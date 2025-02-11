@@ -17,7 +17,7 @@ router.OnViewChanged += view =>
 
 eventDispatcher.Publish("index", []);
 
-while (true) { }
+//while (true) { }
 /*
  * Console.WriteLine("Wellcome to Sport Tracker!");
 

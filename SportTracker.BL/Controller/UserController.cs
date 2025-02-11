@@ -2,24 +2,43 @@
 using SportTracker.BL.Services.Routes;
 using SportTracker.BL.Services;
 using SportTracker.BL.View.CMD;
+using SportTracker.BL.Services.Storage;
 
 namespace SportTracker.BL.Controller
 {
 	public class UserController : Controller
 	{
+		private IDataStorage _dataStorage;
 		public List<User> Users { get; }
-		public User? CurrentUser { get; } = null;
-		public bool IsNewUser { get; } = false;
-
-		private readonly string _userListFilePath = "users.json";
+		public User? CurrentUser { get; set; }
 
 
-		public UserController(IRouter router, EventDispatcher eventDispatcher)
+		public UserController(IRouter router, EventDispatcher eventDispatcher, IDataStorage dataStorage)
 			: base(router, eventDispatcher)
 		{
-			//Users = LoadUserData();
+			_dataStorage = dataStorage;
+
+			Users = _dataStorage.LoadData<User>();
+
+			base.eventDispatcher.Subscribe("auth", HandleAuth);
 		}
 
+		private void HandleAuth(Dictionary<string, string> parameters)
+		{
+			bool isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == parameters["login"])) == null;
+
+			var nextView = isNewUser ? "signUp" : "profile";
+			var nextParams = isNewUser ? parameters : new Dictionary<string, string>
+			{
+				{ "login", CurrentUser!.Login },
+				{ "gender", CurrentUser.UserGender.ToString() },
+				{ "birthDate", CurrentUser.Birthdate.ToString() },
+				{ "weight", CurrentUser.Weight.ToString() },
+				{ "height", CurrentUser.Height.ToString() }
+			};
+
+			base.router.Route(nextView, nextParams);
+		}
 
 
 		/*public UserController(string login)
@@ -96,23 +115,6 @@ namespace SportTracker.BL.Controller
 
 			Users.Add(CurrentUser!);
 			SaveUserData();
-		}
-
-		/// <summary>
-		/// Load list of registered users
-		/// </summary>
-		/// <returns>List of registered users</returns>
-		public List<User> LoadUserData()
-		{
-			return LoadData<User>(_userListFilePath);
-		}
-
-		/// <summary>
-		/// Save user data
-		/// </summary>
-		void SaveUserData()
-		{
-			SaveData<User>(_userListFilePath, Users);
 		}*/
 	}
 }

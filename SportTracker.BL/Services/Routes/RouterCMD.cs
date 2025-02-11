@@ -6,8 +6,8 @@ namespace SportTracker.BL.Services.Routes
 {
     public class RouterCMD : IRouter
     {
-        private EventDispatcher _eventDispatcher;
-		private FileStorage _fileStorage;
+        private readonly EventDispatcher _eventDispatcher;
+		private readonly FileStorage _fileStorage;
         private readonly List<object> _controllers = [];
 
 		public event Action<IView>? OnViewChanged;
@@ -18,13 +18,15 @@ namespace SportTracker.BL.Services.Routes
             _fileStorage = fileStorage;
 
             _controllers.Add(new HomeController(this, _eventDispatcher));
+			_controllers.Add(new UserController(this, _eventDispatcher, _fileStorage));
 		}
-        public void Route(string viewName, Dictionary<string, object>? parameters = null)
+        public void Route(string viewName, Dictionary<string, string>? parameters = null)
         {
             IView view = viewName switch
             {
-                "auth" => new AuthView(),
-                _ => new NotFoundView()
+                "auth" => new AuthView(_eventDispatcher),
+                "signUp" => new SignUpView(_eventDispatcher, parameters ?? []),
+                _ => new NotFoundView(_eventDispatcher)
             };
 
             OnViewChanged?.Invoke(view);

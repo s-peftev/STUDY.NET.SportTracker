@@ -5,6 +5,6 @@ namespace SportTracker.BL.Services.Routes
     public interface IRouter
     {
         public event Action<IView>? OnViewChanged;
-        void Route(string viewName, Dictionary<string, object>? parameters = null);
+        void Route(string viewName, Dictionary<string, string>? parameters = null);
     }
 }

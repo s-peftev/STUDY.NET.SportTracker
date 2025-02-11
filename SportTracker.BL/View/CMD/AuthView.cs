@@ -1,24 +1,40 @@
 ﻿
+using SportTracker.BL.Services;
+
 namespace SportTracker.BL.View.CMD
 {
-	public class AuthView : IView
+	public class AuthView(EventDispatcher eventDispatcher) : View, IView
 	{
+		private EventDispatcher _eventDispatcher = eventDispatcher;
 		public void Render()
 		{
 			Console.Clear();
-			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.WriteLine(@"
-   __        __   _                            _          _   _                                    _      _                         _   __
-   \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |_| |__   ___   ___  ___   ___    ___  | |_   | |_   ___    ____   _____| | / / ___   ___ 
-    \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | __| '_ \ / _ \ / __|| _ \ / _ \ |  _  \| __|  | __||  _  \ / _ \\ /  __/|  / / / _ \|  _  \
-     \ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |_| | | |  __/ \__ \|  _/| (_) ||  _  /| |_   | |_ |  _  /| (_) |\| (__ |  \ \|  __/|  _  /
-      \_/\_/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/   \__|_| |_|\___| |___/|_|   \___/ |_| \_\ \__|   \__||_| \_\ \___/|_\\___\|_| \_\\___||_| \_\ 
-                            ");
-			Console.ResetColor();
+			ViewLayout.WellcomeHeader();
 			Console.SetCursorPosition(60, 17);
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("ENTER YOUR LOGIN:" + new string('_', 22));
+			Console.ResetColor();
 			Console.SetCursorPosition(78, 16);
-			Console.ReadLine();
+			string? login;
+
+			do
+			{
+				login = Console.ReadLine();
+
+				if (string.IsNullOrWhiteSpace(login))
+				{
+					ShowErrorMessage([60, 18], "Login cannot be empty, please enter your login.", [78, 16]);
+				}
+			}
+			while (string.IsNullOrWhiteSpace(login));
+
+
+			var parameters = new Dictionary<string, string>
+			{
+				{ "login", login }
+			};
+
+			_eventDispatcher.Publish("auth", parameters);
 		}
 	}
 }

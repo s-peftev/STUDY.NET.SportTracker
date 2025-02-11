@@ -22,7 +22,7 @@ namespace SportTracker.BL.Services.Storage
 		}
 		public List<T> LoadData<T>() 
 		{
-			using var fs = new FileStream(GetPath(nameof(T)), FileMode.OpenOrCreate);
+			using var fs = new FileStream(GetPath(typeof(T).Name), FileMode.OpenOrCreate);
 
 			if (fs.Length > 0 && JsonSerializer.Deserialize<List<T>>(fs) is List<T> data)
 			{
@@ -36,7 +36,7 @@ namespace SportTracker.BL.Services.Storage
 
 		public void SaveData<T>(List<T> data)
 		{
-			using var writeFs = new FileStream(GetPath(nameof(T)), FileMode.Create);
+			using var writeFs = new FileStream(GetPath(typeof(T).Name), FileMode.Create);
 			JsonSerializer.Serialize(writeFs, data, s_readOptions);
 		}
 	}
