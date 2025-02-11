@@ -1,6 +1,25 @@
 ﻿using SportTracker.BL.Controller;
+using SportTracker.BL.Services;
+using SportTracker.BL.Services.Routes;
+using SportTracker.BL.Services.Storage;
 
-Console.WriteLine("Wellcome to Sport Tracker!");
+Console.WindowWidth = 155;
+Console.WindowHeight = 35;
+
+var eventDispatcher = new EventDispatcher();
+var fileStorage = new FileStorage();
+var router = new RouterCMD(eventDispatcher, fileStorage);
+
+router.OnViewChanged += view =>
+{
+	view.Render();
+};
+
+eventDispatcher.Publish("index", []);
+
+while (true) { }
+/*
+ * Console.WriteLine("Wellcome to Sport Tracker!");
 
 string? login = null;
 UserController? userController = null;
@@ -123,6 +142,7 @@ else
 {
 	Console.WriteLine($"Hi, {userController.CurrentUser}!");
 }
+*/
 
-Console.ReadLine();
+
 

@@ -1,8 +1,11 @@
 ﻿using SportTracker.BL.Model;
+using SportTracker.BL.Services.Routes;
+using SportTracker.BL.Services;
+using SportTracker.BL.View.CMD;
 
 namespace SportTracker.BL.Controller
 {
-	public class UserController : ControllerBase
+	public class UserController : Controller
 	{
 		public List<User> Users { get; }
 		public User? CurrentUser { get; } = null;
@@ -10,7 +13,16 @@ namespace SportTracker.BL.Controller
 
 		private readonly string _userListFilePath = "users.json";
 
-		public UserController(string login)
+
+		public UserController(IRouter router, EventDispatcher eventDispatcher)
+			: base(router, eventDispatcher)
+		{
+			//Users = LoadUserData();
+		}
+
+
+
+		/*public UserController(string login)
 		{
 			if (string.IsNullOrWhiteSpace(login)) 
 			{
@@ -26,9 +38,9 @@ namespace SportTracker.BL.Controller
 				IsNewUser = true;
 				CurrentUser = new User(login, User.Gender.Unknown, DateTime.Now, 1, 1);
 			}
-		}
+		}*/
 
-		public bool SetUserGender(string gender)
+		/*public bool SetUserGender(string gender)
 		{ 
 			string normalizedGender = gender.Trim().ToLower();
 
@@ -101,6 +113,6 @@ namespace SportTracker.BL.Controller
 		void SaveUserData()
 		{
 			SaveData<User>(_userListFilePath, Users);
-		}
+		}*/
 	}
 }
