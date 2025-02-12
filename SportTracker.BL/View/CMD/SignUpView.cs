@@ -1,5 +1,4 @@
-﻿using SportTracker.BL.Controller;
-using SportTracker.BL.Model;
+﻿using SportTracker.BL.Model;
 using SportTracker.BL.Services;
 
 namespace SportTracker.BL.View.CMD

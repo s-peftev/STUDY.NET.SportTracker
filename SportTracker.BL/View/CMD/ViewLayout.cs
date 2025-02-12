@@ -1,4 +1,6 @@
-﻿namespace SportTracker.BL.View.CMD
+﻿using SportTracker.BL.Model;
+
+namespace SportTracker.BL.View.CMD
 {
 	internal class ViewLayout
 	{
@@ -40,6 +42,20 @@
 			Console.SetCursorPosition(66, 30);
 			Console.WriteLine("Press any key, to continue.");
 			Console.ReadKey();
+		}
+
+		internal static void UserInfoComponent(User currentUser)
+		{
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write($"User: {currentUser.Login}" + new string(' ', 5));
+			Console.Write($"Genger: {currentUser.UserGender}" + new string(' ', 5));
+			Console.Write($"Birth date: {currentUser.Birthdate:dd-MM-yyyy}" + new string(' ', 5));
+			Console.Write($"Weight: {currentUser.Weight} kg" + new string(' ', 5));
+			Console.Write($"Height: {currentUser.Height} cm" + new string(' ', 40));
+
+			Console.WriteLine("[Q] - to logout");
+
+			Console.WriteLine(new string('=', Console.WindowWidth));
 		}
 	}
 }

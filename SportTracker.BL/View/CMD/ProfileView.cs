@@ -23,18 +23,18 @@ namespace SportTracker.BL.View.CMD
 			Console.Clear();
 			Console.ResetColor();
 
-			Console.WriteLine($"Hello {currentUser.Login}");
-			Console.WriteLine($"Genger {currentUser.UserGender}");
-			Console.WriteLine($"Birth date {currentUser.Birthdate}");
-			Console.WriteLine($"Weight {currentUser.Weight} kg");
-			Console.WriteLine($"Height {currentUser.Height} cm");
+			ViewLayout.UserInfoComponent(currentUser);
+			WeighingComponent();
 
 			Console.ReadKey();
 		}
 
-		private void UserInfoComponent()
+		private void WeighingComponent()
 		{
-			
+			Console.SetCursorPosition(0, 4);
+			Console.WriteLine(new string('=', Console.WindowWidth));
+			Console.WriteLine("WEIGHINGS");
+			Console.WriteLine(new string('=', Console.WindowWidth));
 		}
 	}
 }
