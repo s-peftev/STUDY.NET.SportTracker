@@ -29,12 +29,12 @@ namespace SportTracker.BL.View.CMD
 			while (string.IsNullOrWhiteSpace(login));
 
 
-			var parameters = new Dictionary<string, string>
+			var userInfo = new Dictionary<string, object>
 			{
 				{ "login", login }
 			};
 
-			_eventDispatcher.Publish("auth", parameters);
+			_eventDispatcher.Publish("auth", userInfo);
 		}
 	}
 }

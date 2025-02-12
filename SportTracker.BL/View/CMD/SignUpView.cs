@@ -4,18 +4,27 @@ using SportTracker.BL.Services;
 
 namespace SportTracker.BL.View.CMD
 {
-	public class SignUpView(EventDispatcher eventDispatcher, Dictionary<string, string> parameters) : View, IView
+	public class SignUpView : View, IView
 	{
-		private EventDispatcher _eventDispatcher = eventDispatcher;
-		private readonly string login = parameters["login"];
+		private EventDispatcher _eventDispatcher;
+		private readonly string _login;
 
+		public SignUpView(EventDispatcher eventDispatcher, object? data)
+		{
+			_eventDispatcher = eventDispatcher;
+
+			if (data is Dictionary<string, object> userInfo)
+				_login = (string)userInfo["login"];
+			else
+				throw new ArgumentException("Invalid data type.");
+		}
 		public void Render()
 		{
 			Console.Clear();
 			ViewLayout.WellcomeHeader();
 			Console.SetCursorPosition(50, 9);
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine($"Hi, {login}, it looks like you`re new. Let`s create you a profile!");
+			Console.WriteLine($"Hi, {_login}, it looks like you`re new. Let`s create you a profile!");
 			
 			Console.SetCursorPosition(60, 12);
 			Console.Write("Choose your gender: ");
@@ -151,16 +160,16 @@ namespace SportTracker.BL.View.CMD
 			}
 			while (true);
 
-			var parameters = new Dictionary<string, string>
+			var userInfo = new Dictionary<string, object>
 			{
-				{ "login", login },
-				{ "userGender",  selectedGenderIndex.ToString() },
-				{ "birthDate",  birthDate.ToString() },
-				{ "weight",  weight.ToString() },
-				{ "height",  height.ToString() },
+				{ "login", _login },
+				{ "userGender",  selectedGenderIndex },
+				{ "birthDate",  birthDate },
+				{ "weight",  weight },
+				{ "height",  height },
 			};
 
-			_eventDispatcher.Publish("signUp", parameters);
+			_eventDispatcher.Publish("signUp", userInfo);
 		}
 	}
 }

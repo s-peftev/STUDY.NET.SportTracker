@@ -15,7 +15,7 @@ namespace SportTracker.BL.View.CMD
 			
 			Console.ReadLine();
 
-			_eventDispatcher.Publish("index", []);
+			_eventDispatcher.Publish("index");
 		}
 	}
 }

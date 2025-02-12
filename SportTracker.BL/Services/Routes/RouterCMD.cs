@@ -20,13 +20,13 @@ namespace SportTracker.BL.Services.Routes
             _controllers.Add(new HomeController(this, _eventDispatcher));
 			_controllers.Add(new UserController(this, _eventDispatcher, _fileStorage));
 		}
-        public void Route(string viewName, Dictionary<string, string>? parameters = null)
+        public void Route(string viewName, object? parameters = null)
         {
             IView view = viewName switch
             {
                 "auth" => new AuthView(_eventDispatcher),
-                "signUp" => new SignUpView(_eventDispatcher, parameters ?? []),
-				"profile" => new ProfileView(_eventDispatcher, parameters ?? []),
+                "signUp" => new SignUpView(_eventDispatcher, parameters),
+				"profile" => new ProfileView(_eventDispatcher, parameters),
 				_ => new NotFoundView(_eventDispatcher)
             };
 

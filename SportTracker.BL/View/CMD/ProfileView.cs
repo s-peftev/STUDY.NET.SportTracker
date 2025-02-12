@@ -1,27 +1,40 @@
-﻿using SportTracker.BL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SportTracker.BL.Model;
+using SportTracker.BL.Services;
 
 namespace SportTracker.BL.View.CMD
 {
-	public class ProfileView(EventDispatcher eventDispatcher, Dictionary<string, string> parameters) : View, IView
+	public class ProfileView : View, IView
 	{
-		private EventDispatcher _eventDispatcher = eventDispatcher;
+		private readonly EventDispatcher _eventDispatcher;
+		private readonly User currentUser;
 
+		public ProfileView(EventDispatcher eventDispatcher, object? data)
+		{
+			_eventDispatcher = eventDispatcher;
+
+			if (data is Dictionary<string, object> userInfo)
+				currentUser = (User)userInfo["currentUser"];
+			else
+				throw new ArgumentException("Invalid data type.");
+		}
 		public void Render()
 		{
 			ViewLayout.SuccessAnimation();
 			Console.Clear();
-			Console.WriteLine($"Hello {parameters["login"]}");
-			Console.WriteLine($"Genger {parameters["userGender"]}");
-			Console.WriteLine($"Birth date {parameters["birthDate"]}");
-			Console.WriteLine($"Weight {parameters["weight"]} kg");
-			Console.WriteLine($"Height {parameters["height"]} cm");
+			Console.ResetColor();
+
+			Console.WriteLine($"Hello {currentUser.Login}");
+			Console.WriteLine($"Genger {currentUser.UserGender}");
+			Console.WriteLine($"Birth date {currentUser.Birthdate}");
+			Console.WriteLine($"Weight {currentUser.Weight} kg");
+			Console.WriteLine($"Height {currentUser.Height} cm");
 
 			Console.ReadKey();
+		}
+
+		private void UserInfoComponent()
+		{
+			
 		}
 	}
 }

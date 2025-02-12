@@ -1,7 +1,6 @@
 ﻿using SportTracker.BL.Model;
 using SportTracker.BL.Services.Routes;
 using SportTracker.BL.Services;
-using SportTracker.BL.View.CMD;
 using SportTracker.BL.Services.Storage;
 using static SportTracker.BL.Model.User;
 
@@ -9,7 +8,7 @@ namespace SportTracker.BL.Controller
 {
 	public class UserController : Controller
 	{
-		private IDataStorage _dataStorage;
+		private readonly IDataStorage _dataStorage;
 		public List<User> Users { get; }
 		public User? CurrentUser { get; set; }
 
@@ -25,118 +24,55 @@ namespace SportTracker.BL.Controller
 			base.eventDispatcher.Subscribe("signUp", HandleSignUp);
 		}
 
-		private void HandleAuth(Dictionary<string, string> parameters)
+		private void HandleAuth(object? data)
 		{
-			var isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == parameters["login"])) == null;
-
-			var nextView = isNewUser ? "signUp" : "profile";
-			var nextParams = isNewUser ? parameters : new Dictionary<string, string>
+			if (data is Dictionary<string, object> userInfo)
 			{
-				{ "login", CurrentUser!.Login },
-				{ "userGender", CurrentUser.UserGender.ToString() },
-				{ "birthDate", CurrentUser.Birthdate.ToString() },
-				{ "weight", CurrentUser.Weight.ToString() },
-				{ "height", CurrentUser.Height.ToString() }
-			};
+				var login = (string)userInfo["login"];
+				var isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == login)) == null;
+				var nextView = isNewUser ? "signUp" : "profile";
 
-			base.router.Route(nextView, nextParams);
-		}
+				var nextParams = isNewUser ? userInfo : new Dictionary<string, object>
+				{
+					{ "currentUser", CurrentUser! }
+				};
 
-		private void HandleSignUp(Dictionary<string, string> parameters)
-		{
-			CurrentUser = new User
-				(
-				parameters["login"],
-				(Gender)int.Parse(parameters["userGender"]),
-				DateTime.Parse(parameters["birthDate"]),
-				double.Parse(parameters["weight"]),
-				double.Parse(parameters["height"])
-				);
-
-			Users.Add(CurrentUser);
-
-			_dataStorage.SaveData<User>(Users);
-
-			parameters["userGender"] = CurrentUser.UserGender.ToString();
-
-			base.router.Route("profile", parameters);
-		}
-
-
-		/*public UserController(string login)
-		{
-			if (string.IsNullOrWhiteSpace(login)) 
-			{
-				throw new ArgumentNullException(nameof(login), "Login can not be empty");
-			}
-
-			Users = LoadUserData();
-			
-			CurrentUser = Users.SingleOrDefault(u => u.Login == login);
-
-			if (CurrentUser == null) 
-			{
-				IsNewUser = true;
-				CurrentUser = new User(login, User.Gender.Unknown, DateTime.Now, 1, 1);
-			}
-		}*/
-
-		/*public bool SetUserGender(string gender)
-		{ 
-			string normalizedGender = gender.Trim().ToLower();
-
-			if (normalizedGender == "male" || normalizedGender == "m")
-			{
-				CurrentUser!.UserGender = User.Gender.Male;
-				return true;
-			}
-			else if (normalizedGender == "female" || normalizedGender == "f")
-			{
-				CurrentUser!.UserGender = User.Gender.Female;
-				return true;
-			}
-
-			throw new ArgumentException("Invalid gender.");
-		}
-
-		public bool SetUserBirthDate(string? birthDate)
-		{
-			string? normalizedBirthDate = birthDate?.Trim();
-
-			if (DateTime.TryParse(normalizedBirthDate, out DateTime parsedDate))
-			{
-				CurrentUser!.Birthdate = parsedDate;
-				return true;
+				base.router.Route(nextView, nextParams);
 			}
 			else
 			{
-				throw new ArgumentException("Invalid birth date.");
-			}
+				base.router.Route("Page 404");
+			}			
 		}
 
-		public bool SetUserWeight(double weight) 
+		private void HandleSignUp(object? data)
 		{
-			CurrentUser!.Weight = weight;
-
-			return true;
-		}
-
-		public bool SetUserHeight(double height)
-		{
-			CurrentUser!.Height = height;
-
-			return true;
-		}
-
-		public void SignUpNewUser()
-		{
-			if (Users.Any(user => user.Login == CurrentUser!.Login))
+			if (data is Dictionary<string, object> userInfo)
 			{
-				throw new Exception("Such user is already exist!");
-			}
+				CurrentUser = new User
+				(
+					(string)userInfo["login"],
+					(Gender)Convert.ToInt32(userInfo["userGender"]),
+					(DateTime)(userInfo["birthDate"]),
+					Convert.ToDouble(userInfo["weight"]),
+					Convert.ToDouble(userInfo["height"])
+				);
 
-			Users.Add(CurrentUser!);
-			SaveUserData();
-		}*/
+				Users.Add(CurrentUser);
+
+				_dataStorage.SaveData<User>(Users);
+
+				var parameters = new Dictionary<string, object>
+				{
+					{ "currentUser", CurrentUser }
+				};
+
+				base.router.Route("profile", parameters);
+			}
+			else
+			{
+				base.router.Route("Page 404");
+			}
+		}
 	}
 }

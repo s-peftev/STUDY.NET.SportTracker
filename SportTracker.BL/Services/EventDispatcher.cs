@@ -3,9 +3,9 @@ namespace SportTracker.BL.Services
 {
 	public class EventDispatcher
 	{
-		private readonly Dictionary<string, List<Action<Dictionary<string, string>>>> _eventHandlers = [];
+		private readonly Dictionary<string, List<Action<object?>>> _eventHandlers = [];
 
-		public void Subscribe(string eventKey, Action<Dictionary<string, string>> handler) 
+		public void Subscribe(string eventKey, Action<object?> handler) 
 		{
 			if (!_eventHandlers.TryGetValue(eventKey, out var value)) 
 			{
@@ -16,7 +16,7 @@ namespace SportTracker.BL.Services
 			value.Add(handler);
 		}
 
-		public void Publish(string eventKey, Dictionary<string, string> parameters)
+		public void Publish(string eventKey, object? parameters = null)
 		{
 			if (_eventHandlers.TryGetValue(eventKey, out var handlers)) 
 			{

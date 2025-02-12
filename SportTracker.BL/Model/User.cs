@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace SportTracker.BL.Model
 {
@@ -82,8 +81,6 @@ namespace SportTracker.BL.Model
 			Weight = weight;
 			Height = height;
 		}
-
-		//public User(string login) : this(login, Gender.Male, DateTime.Now, 1, 1) { }
 
 		public override string ToString() 
 		{
