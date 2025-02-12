@@ -23,7 +23,7 @@ namespace SportTracker.BL.View.CMD
 
 				if (string.IsNullOrWhiteSpace(login))
 				{
-					ShowErrorMessage([60, 18], "Login cannot be empty, please enter your login.", [78, 16]);
+					ShowNotification([60, 18], "Login cannot be empty, please enter your login.", ConsoleColor.Red, [78, 16]);
 				}
 			}
 			while (string.IsNullOrWhiteSpace(login));

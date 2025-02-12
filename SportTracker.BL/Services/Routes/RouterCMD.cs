@@ -26,7 +26,8 @@ namespace SportTracker.BL.Services.Routes
             {
                 "auth" => new AuthView(_eventDispatcher),
                 "signUp" => new SignUpView(_eventDispatcher, parameters ?? []),
-                _ => new NotFoundView(_eventDispatcher)
+				"profile" => new ProfileView(_eventDispatcher, parameters ?? []),
+				_ => new NotFoundView(_eventDispatcher)
             };
 
             OnViewChanged?.Invoke(view);

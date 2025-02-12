@@ -14,5 +14,32 @@
                             ");
 			Console.ResetColor();
 		}
+
+		internal static void SuccessAnimation() 
+		{
+			var delay = 20;
+
+			Console.Clear();
+			Console.ForegroundColor = ConsoleColor.Green;
+
+			
+			for (int i = 65, k = 12; k < 25; i++, k++) 
+			{
+				Console.SetCursorPosition(i, k);
+				Console.WriteLine("***");
+				Thread.Sleep(delay);
+			}
+
+			for (int i = 78, k = 24; k > 8; i++, k--)
+			{
+				Console.SetCursorPosition(i, k);
+				Console.WriteLine("***");
+				Thread.Sleep(delay);
+			}
+
+			Console.SetCursorPosition(66, 30);
+			Console.WriteLine("Press any key, to continue.");
+			Console.ReadKey();
+		}
 	}
 }

@@ -16,48 +16,151 @@ namespace SportTracker.BL.View.CMD
 			Console.SetCursorPosition(50, 9);
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine($"Hi, {login}, it looks like you`re new. Let`s create you a profile!");
+			
+			Console.SetCursorPosition(60, 12);
+			Console.Write("Choose your gender: ");
+			Console.SetCursorPosition(44, 15);
+			Console.WriteLine("Enter your birth date (DD-MM-YYYY): ");
+			Console.SetCursorPosition(56, 18);
+			Console.Write("Enter your weight (kg): ");
+			Console.SetCursorPosition(56, 21);
+			Console.Write("Enter your height (cm): ");
 
-			User.Gender[] genderOptions = { User.Gender.Male, User.Gender.Female };
-			int selectedIndex = 0;
 			ConsoleKey key;
 
-			Console.SetCursorPosition(60, 12);
+			//Gender section
+			User.Gender[] genderOptions = { User.Gender.Male, User.Gender.Female };
+			int selectedGenderIndex = 0;
+			Console.SetCursorPosition(80, 12);
+
 			do
 			{
-				RewriteConsoleLine(60);
+				ResetConsoleLineFrom(80);
 
-				Console.Write("Choose your gender: ");
-				Console.ForegroundColor = selectedIndex == 0 ? ConsoleColor.Green : ConsoleColor.Gray;
-				Console.Write("Male");
+				Console.ForegroundColor = selectedGenderIndex == 0 ? ConsoleColor.Green : ConsoleColor.Gray;
+				Console.Write($"{genderOptions[0]}");
 				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.Write("/");
-				Console.ForegroundColor = selectedIndex == 1 ? ConsoleColor.Green : ConsoleColor.Gray;
-				Console.Write("Female");
+				Console.ForegroundColor = selectedGenderIndex == 1 ? ConsoleColor.Green : ConsoleColor.Gray;
+				Console.Write($"{genderOptions[1]}");
 				Console.ForegroundColor = ConsoleColor.Yellow;
 
 				key = Console.ReadKey(true).Key;
 
 				if (key == ConsoleKey.RightArrow)
 				{
-					selectedIndex = (selectedIndex + 1) % genderOptions.Length;
+					selectedGenderIndex = (selectedGenderIndex + 1) % genderOptions.Length;
 				}
 				else if (key == ConsoleKey.LeftArrow)
 				{
-					selectedIndex = (selectedIndex - 1 + genderOptions.Length) % genderOptions.Length;
+					selectedGenderIndex = (selectedGenderIndex - 1 + genderOptions.Length) % genderOptions.Length;
 				}
 
 			}
 			while (key != ConsoleKey.Enter);
-			
+			ShowNotification([80, 13], "Nice choice! =)", ConsoleColor.Green, [80, 15]);
 
-			Console.ReadLine();
-		}
+			//Birh date section
+			DateTime birthDate;
+			Console.SetCursorPosition(80, 15);
 
-		private void RewriteConsoleLine(int cursorPositionX)
-		{
-			Console.SetCursorPosition(0, Console.CursorTop);
-			Console.Write(new string(' ', Console.WindowWidth));
-			Console.SetCursorPosition(cursorPositionX, Console.CursorTop);
+			do
+			{
+				ResetConsoleLineFrom(80);
+				var input = Console.ReadLine();
+
+
+				if (DateTime.TryParse(input, out DateTime parsedDate))
+				{
+					if (parsedDate <= DateTime.Now)
+					{
+						birthDate = parsedDate;
+						ResetConsoleLineFrom(80, 16);
+						ShowNotification([80, 16], "Here we go!", ConsoleColor.Green, [80, 15]);
+						break;
+					}
+					ResetConsoleLineFrom(80, 16);
+					ShowNotification([80, 16], "This app ain`t for time travellers! Try one more time =)", ConsoleColor.Red, [80, 15]);
+
+				}
+				else
+				{
+					ResetConsoleLineFrom(80, 16);
+					ShowNotification([80, 16], "Invalid date format. Try one more time =)", ConsoleColor.Red, [80, 15]);
+				}
+				
+			}
+			while (true);
+
+			//Weight section
+			double weight;
+			Console.SetCursorPosition(80, 18);
+
+			do
+			{
+				ResetConsoleLineFrom(80);
+				var input = Console.ReadLine();
+
+				if (double.TryParse(input, out double parsedWeight))
+				{
+					if (parsedWeight > 0)
+					{
+						weight = parsedWeight;
+						ResetConsoleLineFrom(80, 19);
+						ShowNotification([80, 19], "Perfect!", ConsoleColor.Green, [80, 18]);
+						break;
+					}
+					ResetConsoleLineFrom(80, 19);
+					ShowNotification([80, 19], "You better eat first, and than try again. =)", ConsoleColor.Red, [80, 18]);
+				}
+				else
+				{
+					ResetConsoleLineFrom(80, 19);
+					ShowNotification([80, 19], "Invalid weight format. Try one more time =)", ConsoleColor.Red, [80, 18]);
+				}
+			}
+			while (true);
+
+			//Height section
+			double height;
+			Console.SetCursorPosition(80, 21);
+
+			do
+			{
+				ResetConsoleLineFrom(80);
+				var input = Console.ReadLine();
+
+				if (double.TryParse(input, out double parsedHeight))
+				{
+					if (parsedHeight > 0)
+					{
+						height = parsedHeight;
+						ResetConsoleLineFrom(80, 22);
+						ShowNotification([80, 22], "Magnificent!", ConsoleColor.Green, [80, 21]);
+						Thread.Sleep(1000);
+						break;
+					}
+					ResetConsoleLineFrom(80, 22);
+					ShowNotification([80, 22], "Liar! Tell me the truth! =)", ConsoleColor.Red, [80, 21]);
+				}
+				else
+				{
+					ResetConsoleLineFrom(80, 22);
+					ShowNotification([80, 22], "Invalid height format. Try one more time =)", ConsoleColor.Red, [80, 21]);
+				}
+			}
+			while (true);
+
+			var parameters = new Dictionary<string, string>
+			{
+				{ "login", login },
+				{ "userGender",  selectedGenderIndex.ToString() },
+				{ "birthDate",  birthDate.ToString() },
+				{ "weight",  weight.ToString() },
+				{ "height",  height.ToString() },
+			};
+
+			_eventDispatcher.Publish("signUp", parameters);
 		}
 	}
 }

@@ -3,6 +3,7 @@ using SportTracker.BL.Services.Routes;
 using SportTracker.BL.Services;
 using SportTracker.BL.View.CMD;
 using SportTracker.BL.Services.Storage;
+using static SportTracker.BL.Model.User;
 
 namespace SportTracker.BL.Controller
 {
@@ -21,23 +22,44 @@ namespace SportTracker.BL.Controller
 			Users = _dataStorage.LoadData<User>();
 
 			base.eventDispatcher.Subscribe("auth", HandleAuth);
+			base.eventDispatcher.Subscribe("signUp", HandleSignUp);
 		}
 
 		private void HandleAuth(Dictionary<string, string> parameters)
 		{
-			bool isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == parameters["login"])) == null;
+			var isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == parameters["login"])) == null;
 
 			var nextView = isNewUser ? "signUp" : "profile";
 			var nextParams = isNewUser ? parameters : new Dictionary<string, string>
 			{
 				{ "login", CurrentUser!.Login },
-				{ "gender", CurrentUser.UserGender.ToString() },
+				{ "userGender", CurrentUser.UserGender.ToString() },
 				{ "birthDate", CurrentUser.Birthdate.ToString() },
 				{ "weight", CurrentUser.Weight.ToString() },
 				{ "height", CurrentUser.Height.ToString() }
 			};
 
 			base.router.Route(nextView, nextParams);
+		}
+
+		private void HandleSignUp(Dictionary<string, string> parameters)
+		{
+			CurrentUser = new User
+				(
+				parameters["login"],
+				(Gender)int.Parse(parameters["userGender"]),
+				DateTime.Parse(parameters["birthDate"]),
+				double.Parse(parameters["weight"]),
+				double.Parse(parameters["height"])
+				);
+
+			Users.Add(CurrentUser);
+
+			_dataStorage.SaveData<User>(Users);
+
+			parameters["userGender"] = CurrentUser.UserGender.ToString();
+
+			base.router.Route("profile", parameters);
 		}
 
 
