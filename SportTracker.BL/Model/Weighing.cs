@@ -1,6 +1,4 @@
 ﻿
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace SportTracker.BL.Model
 {
 	public class Weighing(int id, double weight, DateTime weighingDate, string userLogin)

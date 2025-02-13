@@ -47,10 +47,21 @@ namespace SportTracker.BL.View.CMD
 			}
 			while (!navigationKeys.Contains(key));
 
+			var userInfo = new Dictionary<string, object>
+			{
+				{ "currentUser", _currentUser }
+			};
+
 			switch (key)
 			{
 				case ConsoleKey.Q:
 					_eventDispatcher.Publish("index");
+					break;
+				case ConsoleKey.W:
+					_eventDispatcher.Publish("weighingCreate", userInfo);
+					break;
+				case ConsoleKey.D1:
+					_eventDispatcher.Publish("weighingIndex", userInfo);
 					break;
 			};
 		}
@@ -59,25 +70,31 @@ namespace SportTracker.BL.View.CMD
 		{
 			Console.SetCursorPosition(0, 4);
 			Console.WriteLine(new string('=', Console.WindowWidth));
-			Console.WriteLine("WEIGHINGS");
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write("WEIGHINGS" + new string(' ', 88));
+			Console.Write("[W] - to add weighing" + new string(' ', 5));
+			Console.WriteLine("[1] - to open weighings list");
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine(new string('=', Console.WindowWidth));
 
 			for (int i = 0, k = 0; i < maxCount && i < weighings.Count; i++, k += 19)
 			{
 				WeighingComponent(weighings[i], 0 + k, 8);
 			}
-			
+
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine(new string('=', Console.WindowWidth));
 		}
 
 		private void WeighingComponent(Weighing weighing, int coordinateX, int coordinateY)
 		{
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.SetCursorPosition(coordinateX, coordinateY);
 			Console.Write(new string('*', 18));
 			Console.SetCursorPosition(coordinateX, coordinateY + 1);
 			Console.Write($"*Date: {weighing.WeighingDate:dd-MM-yyy}*");
 			Console.SetCursorPosition(coordinateX, coordinateY + 2);
-			Console.Write($"*Weight: {weighing.Weight} kg *");
+			Console.Write($"*Weight: {weighing.Weight:F1} kg *");
 			Console.SetCursorPosition(coordinateX, coordinateY + 3);
 			Console.WriteLine(new string('*', 18));
 		}

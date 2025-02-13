@@ -34,7 +34,7 @@ namespace SportTracker.BL.Controller
 				if (CurrentUser == null)
 					base.router.Route("signUp", userInfo);
 				else
-					base.eventDispatcher.Publish("signIn");
+					base.eventDispatcher.Publish("profile");
 			}
 			else
 			{
@@ -57,14 +57,38 @@ namespace SportTracker.BL.Controller
 
 				Users.Add(CurrentUser);
 
+				//TODO add first weighing
+
 				_dataStorage.SaveData<User>(Users);
 
-				base.eventDispatcher.Publish("signIn");
+				base.eventDispatcher.Publish("profile");
 			}
 			else
 			{
 				base.router.Route("Page 404");
 			}
+		}
+
+		public User? GetUserByLogin(string login)
+		{ 
+			return Users.SingleOrDefault(u => u.Login == login);
+		}
+
+		public void UpdateUser(User user)
+		{
+			var oldUser = GetUserByLogin(user.Login);
+
+			if (oldUser != null) 
+			{
+				Users.Remove(oldUser);
+			}
+
+			Users.Add(user);
+
+			_dataStorage.SaveData<User>(Users);
+
+			if(user.Login == CurrentUser!.Login)
+				CurrentUser = user;
 		}
 	}
 }

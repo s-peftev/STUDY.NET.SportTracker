@@ -1,6 +1,7 @@
 ﻿using SportTracker.BL.Controller;
 using SportTracker.BL.Services.Storage;
 using SportTracker.BL.View.CMD;
+using SportTracker.BL.View.CMD.Weighhing;
 
 namespace SportTracker.BL.Services.Routes
 {
@@ -19,7 +20,7 @@ namespace SportTracker.BL.Services.Routes
 
             var homeController = new HomeController(this, _eventDispatcher);
 			var userController = new UserController(this, _eventDispatcher, _fileStorage);
-			var weighingController = new WeighingController(this, _eventDispatcher, _fileStorage);
+			var weighingController = new WeighingController(this, _eventDispatcher, _fileStorage, userController);
 			var profileController = new ProfileController(this, _eventDispatcher, userController, weighingController);
 
 			_controllers.Add(homeController);
@@ -34,6 +35,10 @@ namespace SportTracker.BL.Services.Routes
                 "auth" => new AuthView(_eventDispatcher),
                 "signUp" => new SignUpView(_eventDispatcher, data),
 				"profile" => new ProfileView(_eventDispatcher, data),
+
+				"weighingCreate" => new WeighingCreateView(_eventDispatcher, data),
+				"weighingIndex" => new WeighingIndexView(_eventDispatcher, data),
+
 				_ => new NotFoundView(_eventDispatcher)
             };
 

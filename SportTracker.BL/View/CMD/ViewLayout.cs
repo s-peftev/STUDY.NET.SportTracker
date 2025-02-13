@@ -46,15 +46,17 @@ namespace SportTracker.BL.View.CMD
 
 		internal static void UserInfoComponent(User currentUser)
 		{
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.Write($"User: {currentUser.Login}" + new string(' ', 5));
 			Console.Write($"Genger: {currentUser.UserGender}" + new string(' ', 5));
 			Console.Write($"Birth date: {currentUser.Birthdate:dd-MM-yyyy}" + new string(' ', 5));
 			Console.Write($"Weight: {currentUser.Weight} kg" + new string(' ', 5));
-			Console.Write($"Height: {currentUser.Height} cm" + new string(' ', 40));
+			Console.Write($"Height: {currentUser.Height} cm" + new string(' ', 43));
 
+			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine("[Q] - to logout");
 
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine(new string('=', Console.WindowWidth));
 		}
 	}

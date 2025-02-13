@@ -36,13 +36,13 @@ namespace SportTracker.BL.Controller
 			_userController = userController;
 			_weighingController = weighingController;
 
-			base.eventDispatcher.Subscribe("signIn", _ => HandleSignIn());
+			base.eventDispatcher.Subscribe("profile", _ => HandleProfile());
 		}
 
-		private void HandleSignIn()
+		private void HandleProfile()
 		{
 			var currentUser = _userController.CurrentUser ?? throw new NotImplementedException();
-			var userWeighings = _weighings.Where(w => w.UserLogin == currentUser.Login).ToList();
+			var userWeighings = _weighingController.Weighings.Where(w => w.UserLogin == currentUser.Login).ToList();//_weighings.Where(w => w.UserLogin == currentUser.Login).ToList();
 
 			var data = new Dictionary<string, object?>
 			{
