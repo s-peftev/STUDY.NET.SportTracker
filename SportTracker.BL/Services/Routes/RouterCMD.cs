@@ -17,8 +17,15 @@ namespace SportTracker.BL.Services.Routes
 			_eventDispatcher = eventDispatcher;
             _fileStorage = fileStorage;
 
-            _controllers.Add(new HomeController(this, _eventDispatcher));
-			_controllers.Add(new UserController(this, _eventDispatcher, _fileStorage));
+            var homeController = new HomeController(this, _eventDispatcher);
+			var userController = new UserController(this, _eventDispatcher, _fileStorage);
+			var weighingController = new WeighingController(this, _eventDispatcher, _fileStorage);
+			var profileController = new ProfileController(this, _eventDispatcher, userController, weighingController);
+
+			_controllers.Add(homeController);
+			_controllers.Add(userController);
+			_controllers.Add(weighingController);
+			_controllers.Add(profileController);
 		}
         public void Route(string viewName, object? data = null)
         {

@@ -113,7 +113,7 @@ namespace SportTracker.BL.View.CMD
 				{
 					if (parsedWeight > 0)
 					{
-						weight = parsedWeight;
+						weight = double.Round(parsedWeight, 1);
 						ResetConsoleLineFrom(80, 19);
 						ShowNotification([80, 19], "Perfect!", ConsoleColor.Green, [80, 18]);
 						break;
@@ -142,7 +142,7 @@ namespace SportTracker.BL.View.CMD
 				{
 					if (parsedHeight > 0)
 					{
-						height = parsedHeight;
+						height = double.Round(parsedHeight, 0);
 						ResetConsoleLineFrom(80, 22);
 						ShowNotification([80, 22], "Magnificent!", ConsoleColor.Green, [80, 21]);
 						Thread.Sleep(1000);

@@ -17,6 +17,7 @@ namespace SportTracker.BL.Services.Storage
 			return dataType switch
 			{
 				nameof(User) => "users.json",
+				nameof(Weighing) => "weighings.json",
 				_ => throw new NotImplementedException()
 			};
 		}

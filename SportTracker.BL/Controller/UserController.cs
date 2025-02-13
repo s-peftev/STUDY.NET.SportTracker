@@ -29,15 +29,12 @@ namespace SportTracker.BL.Controller
 			if (data is Dictionary<string, object> userInfo)
 			{
 				var login = (string)userInfo["login"];
-				var isNewUser = (CurrentUser = Users.SingleOrDefault(u => u.Login == login)) == null;
-				var nextView = isNewUser ? "signUp" : "profile";
+				CurrentUser = Users.SingleOrDefault(u => u.Login == login);
 
-				var nextParams = isNewUser ? userInfo : new Dictionary<string, object>
-				{
-					{ "currentUser", CurrentUser! }
-				};
-
-				base.router.Route(nextView, nextParams);
+				if (CurrentUser == null)
+					base.router.Route("signUp", userInfo);
+				else
+					base.eventDispatcher.Publish("signIn");
 			}
 			else
 			{
@@ -62,12 +59,7 @@ namespace SportTracker.BL.Controller
 
 				_dataStorage.SaveData<User>(Users);
 
-				var parameters = new Dictionary<string, object>
-				{
-					{ "currentUser", CurrentUser }
-				};
-
-				base.router.Route("profile", parameters);
+				base.eventDispatcher.Publish("signIn");
 			}
 			else
 			{
