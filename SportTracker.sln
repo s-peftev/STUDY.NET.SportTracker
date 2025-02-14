@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportTracker.BL", "SportTra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportTracker.CMD", "SportTracker.CMD\SportTracker.CMD.csproj", "{16950247-316A-4402-9284-E029C202F769}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportTracker.BLTests", "SportTracker.BLTests\SportTracker.BLTests.csproj", "{77AE7330-785C-4024-869C-A0C8FF077A16}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{16950247-316A-4402-9284-E029C202F769}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16950247-316A-4402-9284-E029C202F769}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16950247-316A-4402-9284-E029C202F769}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77AE7330-785C-4024-869C-A0C8FF077A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77AE7330-785C-4024-869C-A0C8FF077A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77AE7330-785C-4024-869C-A0C8FF077A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77AE7330-785C-4024-869C-A0C8FF077A16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

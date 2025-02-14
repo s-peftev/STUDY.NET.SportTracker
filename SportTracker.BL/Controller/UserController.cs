@@ -56,12 +56,16 @@ namespace SportTracker.BL.Controller
 				);
 
 				Users.Add(CurrentUser);
-
-				//TODO add first weighing
-
 				_dataStorage.SaveData<User>(Users);
 
-				base.eventDispatcher.Publish("profile");
+				var firstWeighing = new Dictionary<string, object>
+				{
+					{ "login", CurrentUser.Login },
+					{ "weight",  CurrentUser.Weight },
+					{ "weighingDate",  DateTime.Now },
+				};
+
+				base.eventDispatcher.Publish("weighingSave", firstWeighing);
 			}
 			else
 			{
